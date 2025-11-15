@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { test, expect } from '@playwright/test';
-import {MainPage, RegisterPage, SettingsPage, LoginPage } from '../src/page/index';
+import {App} from '../src/page/appPage';
 const URL =  'https://realworld.qa.guru/';
 
 test.describe('изменение пароля', () => {
@@ -20,20 +20,18 @@ test.describe('изменение пароля', () => {
         }
 
 
-        const reqisterPage = new RegisterPage(page);
-        const mainPage = new MainPage(page)
-        const settingPage = new SettingsPage(page)
-        const loginPage = new LoginPage(page)
+        let app = new App(page);
 
 
-        await mainPage.gotoRegister()
-        await reqisterPage.Register(user);
-        await mainPage.gotoSettings()
-        await settingPage.editPassword(password)
-        await mainPage.logOut()
-        await mainPage.gotoLogin()
-        await loginPage.authorization(user, password);
-        await expect(mainPage.dropDownUser).toContainText(user.name);
+
+        await app.main.gotoRegister()
+        await app.register.Register(user)
+        await app.main.gotoSettings()
+        await app.settings.editPassword(password)
+        await app.main.logOut()
+        await app.main.gotoLogin()
+        await app.login.authorization(user, password);
+        await expect(app.main.dropDownUser).toContainText(user.name);
 
     });
 });

@@ -7,7 +7,6 @@ export class ArticlePage {
         this.commentInput = page.getByRole('textbox',{name: "Write a comment..."});
         this.cardText = page.locator('.card-text');
         this.postcommentButton = page.getByRole('button',{name: "Post comment"});
-
     }
     async addComment(COMMENT){
         const {text} = COMMENT

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
-import {MainPage, RegisterPage, AddArticlePage, ArticlePage } from '../src/page/index';
+import {App} from '../src/page/appPage';
 const URL =  'https://realworld.qa.guru/';
 
 test.describe('Артикул', () => {
@@ -29,19 +29,16 @@ test.describe('Артикул', () => {
 
         }
 
-        const reqisterPage = new RegisterPage(page);
-        const mainPage = new MainPage(page)
-        const addArticlePage = new AddArticlePage(page)
-        const articlePage = new ArticlePage(page)
+        let app = new App(page);
 
 
-        await mainPage.gotoRegister()
-        await reqisterPage.Register(user);
-        await mainPage.gotoArtcle();
-        await addArticlePage.addArticle(articleAttribute);
-        await articlePage.gotoEditArticle();
-        await addArticlePage.editArticle(editArticleAttribute);
-        await expect(articlePage.banner).toContainText(editArticleAttribute.title);
+        await app.main.gotoRegister()
+        await app.register.Register(user);
+        await app.main.gotoArtcle();
+        await app.addArticle.addArticle(articleAttribute);
+        await app.article.gotoEditArticle();
+        await app.addArticle.editArticle(editArticleAttribute);
+        await expect(app.article.banner).toContainText(editArticleAttribute.title);
 
     });
 });

@@ -1,7 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
-import {MainPage, RegisterPage, AddArticlePage, ArticlePage } from '../src/page/index';
+import {App} from '../src/page/appPage';
+import {articlesAttributeBuilder, UserBuilder} from '../src/helpers/index';
 const URL =  'https://realworld.qa.guru/';
+
 
 test.describe('статья', () => {
     test.beforeEach( async ({ page }) => {
@@ -9,28 +11,29 @@ test.describe('статья', () => {
     });
     test("Добавление новой статьи ", async ({ page }) => {
 
-        const user = {
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            password: faker.internet.password(),
-        }
-        const articleAttribute = {
-            title: faker.lorem.words(3),
-            description: faker.lorem.sentence(),
-            body: faker.lorem.paragraph(2),
-            tags: faker.lorem.sentence(),
-        }
-
-        const reqisterPage = new RegisterPage(page);
-        const mainPage = new MainPage(page)
-        const addArticlePage = new AddArticlePage(page)
-        const articlePage = new ArticlePage(page)
+        const articlesAttribute = new articlesAttributeBuilder()
+            .Title()
+            .Description()
+            .Body()
+            .Tags()
+            .generate();
 
 
-        await mainPage.gotoRegister()
-        await reqisterPage.Register(user);
-        await mainPage.gotoArtcle();
-        await addArticlePage.addArticle(articleAttribute);
-        await expect(articlePage.banner).toContainText(articleAttribute.title);
+
+        const user = new UserBuilder()
+            .Name()
+            .Email()
+            .Password()
+            .generate();
+
+
+        let app = new App(page);
+
+
+        await app.main.gotoRegister()
+        await app.register.Register(user);
+        await app.main.gotoArtcle();
+        await app.addArticle.addArticle(articlesAttribute);
+        await expect(app.article.banner).toContainText(articlesAttribute.title);
     });
 });

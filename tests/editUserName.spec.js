@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { test, expect } from '@playwright/test';
-import {MainPage, RegisterPage, SettingsPage, } from '../src/page/index';
+import {App} from '../src/page/appPage';
 const URL =  'https://realworld.qa.guru/';
 
 test.describe('изменение имени', () => {
@@ -19,17 +19,13 @@ test.describe('изменение имени', () => {
             name: faker.person.fullName()
         }
 
-        const reqisterPage = new RegisterPage(page);
-        const mainPage = new MainPage(page)
-        const settingsPage = new SettingsPage(page)
+        let app = new App(page);
 
-
-
-        await mainPage.gotoRegister()
-        await reqisterPage.Register(user);
-        await mainPage.gotoSettings()
-        await settingsPage.editUserName(editSettings);
-        await expect(mainPage.dropDownButton).toContainText(editSettings.name);
+        await app.main.gotoRegister()
+        await app.register.Register(user);
+        await app.main.gotoSettings()
+        await app.settings.editUserName(editSettings);
+        await expect(app.main.dropDownButton).toContainText(editSettings.name);
 
 
 

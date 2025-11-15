@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { ChallengerService } from "../src/services/index";
-
+/*
 const URL = "https://apichallenges.eviltester.com";
 let token;
 

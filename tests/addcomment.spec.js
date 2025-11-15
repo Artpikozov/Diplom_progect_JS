@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
-import {MainPage, RegisterPage, AddArticlePage, ArticlePage } from '../src/page/index';
+import {App} from '../src/page/appPage';
+import {articlesAttributeBuilder, UserBuilder} from '../src/helpers/index';
 const URL =  'https://realworld.qa.guru/';
 
 test.describe('Комментарий', () => {
@@ -10,33 +11,36 @@ test.describe('Комментарий', () => {
 
     test("Добавление комментария ", async ({ page }) => {
 
-        const user = {
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            password: faker.internet.password(),
-        }
-        const articleAttribute = {
-            title: faker.lorem.words(3),
-            description: faker.lorem.sentence(),
-            body: faker.lorem.paragraph(2),
-            tags: faker.lorem.sentence(),
-        }
+        const articlesAttribute = new articlesAttributeBuilder()
+            .Title()
+            .Description()
+            .Body()
+            .Tags()
+            .generate();
+
+
+
+        const user = new UserBuilder()
+            .Name()
+            .Email()
+            .Password()
+            .generate();
+
+
         const COMMENT = {
             text: faker.lorem.sentences()
         }
 
-        const reqisterPage = new RegisterPage(page);
-        const mainPage = new MainPage(page)
-        const addArticlePage = new AddArticlePage(page)
-        const articlePage = new ArticlePage(page)
+        let app = new App(page);
 
 
-        await mainPage.gotoRegister()
-        await reqisterPage.Register(user);
-        await mainPage.gotoArtcle();
-        await addArticlePage.addArticle(articleAttribute);
-        await articlePage.addComment(COMMENT);
-        await expect(articlePage.cardText).toContainText(COMMENT.text)
+
+        await app.main.gotoRegister()
+        await app.register.Register(user);
+        await app.main.gotoArtcle();
+        await app.addArticle.addArticle(articleAttribute);
+        await app.article.addComment(COMMENT);
+        await expect(app.article.cardText).toContainText(COMMENT.text)
         //await expect(articlePage.cardText).toContainText(COMMENT.comment)
 
     });
