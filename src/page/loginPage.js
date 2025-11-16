@@ -5,11 +5,11 @@ export class LoginPage {
         this.loginButton = page.locator('.btn.btn-lg.btn-primary.pull-xs-right');
 
     }
-    async authorization(user, password){
+    async authorization(user, settingsBuilder){
         const {email} = user;
-        const {pass} = password;
+        const {editPassword} = settingsBuilder;
         await this.emailInput.fill(email);
-        await this.passwordInput.fill(pass);
+        await this.passwordInput.fill(editPassword);
         await this.loginButton.click();
     }
 }

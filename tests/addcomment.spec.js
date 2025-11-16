@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import {App} from '../src/page/appPage';
-import {articlesAttributeBuilder, UserBuilder} from '../src/helpers/index';
+import {articlesAttributeBuilder, UserBuilder, articlesBuilder} from '../src/helpers/index';
 const URL =  'https://realworld.qa.guru/';
 
 test.describe('Комментарий', () => {
@@ -26,10 +26,10 @@ test.describe('Комментарий', () => {
             .Password()
             .generate();
 
+        const ArticlesBuilder = new articlesBuilder()
+            .articleComment()
+            .generate();
 
-        const COMMENT = {
-            text: faker.lorem.sentences()
-        }
 
         let app = new App(page);
 
@@ -38,10 +38,9 @@ test.describe('Комментарий', () => {
         await app.main.gotoRegister()
         await app.register.Register(user);
         await app.main.gotoArtcle();
-        await app.addArticle.addArticle(articleAttribute);
-        await app.article.addComment(COMMENT);
-        await expect(app.article.cardText).toContainText(COMMENT.text)
-        //await expect(articlePage.cardText).toContainText(COMMENT.comment)
+        await app.addArticle.addArticle(articlesAttribute);
+        await app.article.addComment(ArticlesBuilder);
+        await expect(app.article.cardText).toContainText(ArticlesBuilder.comment)
 
     });
 });

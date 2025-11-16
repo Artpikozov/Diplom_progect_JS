@@ -8,13 +8,14 @@ export class ArticlePage {
         this.cardText = page.locator('.card-text');
         this.postcommentButton = page.getByRole('button',{name: "Post comment"});
     }
-    async addComment(COMMENT){
-        const {text} = COMMENT
-        await this.commentInput.fill(text);
+    async addComment(articlesBuilder){
+        const {comment} = articlesBuilder
+        await this.commentInput.fill(comment);
         await this.postcommentButton.click();
 
     }
     async gotoEditArticle(){
         await this.editArticleButtonActios.click();
     }
+
 }

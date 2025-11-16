@@ -21,6 +21,7 @@ export class articlesAttributeBuilder {
         return this;
     }
 
+
     generate() {
         // Деструктуризация убивает неиспользуемые поля
         return {...this};

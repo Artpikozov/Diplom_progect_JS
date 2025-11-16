@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import {App} from '../src/page/appPage';
+import {articlesAttributeBuilder, UserBuilder, EditArticle} from "../src/helpers";
 const URL =  'https://realworld.qa.guru/';
 
 test.describe('Артикул', () => {
@@ -10,24 +11,25 @@ test.describe('Артикул', () => {
 
     test("Изменение статьи", async ({ page }) => {
 
-        const user = {
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            password: faker.internet.password(),
-        }
-        const articleAttribute = {
-            title: faker.lorem.words(3),
-            description: faker.lorem.sentence(),
-            body: faker.lorem.paragraph(2),
-            tags: faker.lorem.sentence(),
-        }
-        const editArticleAttribute = {
-            title: faker.lorem.words(3),
-            description: faker.lorem.sentence(),
-            body: faker.lorem.paragraph(2),
-            tags: faker.lorem.sentence(),
+        const articlesAttribute = new articlesAttributeBuilder()
+            .Title()
+            .Description()
+            .Body()
+            .Tags()
+            .generate();
 
-        }
+        const user = new UserBuilder()
+            .Name()
+            .Email()
+            .Password()
+            .generate();
+
+        const editArticle  = new EditArticle()
+            .editTitle()
+            .editDescription()
+            .editBody()
+            .editTags();
+
 
         let app = new App(page);
 
@@ -35,10 +37,10 @@ test.describe('Артикул', () => {
         await app.main.gotoRegister()
         await app.register.Register(user);
         await app.main.gotoArtcle();
-        await app.addArticle.addArticle(articleAttribute);
+        await app.addArticle.addArticle(articlesAttribute);
         await app.article.gotoEditArticle();
-        await app.addArticle.editArticle(editArticleAttribute);
-        await expect(app.article.banner).toContainText(editArticleAttribute.title);
+        await app.addArticle.editArticle(editArticle);
+        await expect(app.article.banner).toContainText(editArticle.title);
 
     });
 });

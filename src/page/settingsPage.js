@@ -6,9 +6,9 @@ export class SettingsPage{
 
     }
 
-    async editPassword(password){
-        const {pass} = password;
-        await this.password.fill(pass)
+    async editPassword(settingsBuilder){
+        const {editPassword} = settingsBuilder;
+        await this.password.fill(editPassword)
         await this.upDateSettingsButtom.click();
     }
     async editUserName(settings){
